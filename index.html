@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automatic Timetable Generator · Delhi Tech</title>
+  <link rel="icon" href="assets/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <!-- Export libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+  <!-- Background video (place your video file at css/bg.mp4) -->
+  <video id="bgVideo" class="background-video" autoplay muted loop playsinline>
+    <source src="css/bg.mp4" type="video/mp4">
+    Your browser does not support the background video.
+  </video>
+  <div class="wizard-container">
+    <h1 class="title">Automatic Timetable Generator</h1>
+
+    <!-- Progress Stepper -->
+    <div class="progress-bar" data-step="1">
+      <div class="step active" data-step="1">Enter Details</div>
+      <div class="step" data-step="2">Preview</div>
+      <div class="step" data-step="3">Generate</div>
+      <div class="step" data-step="4">View</div>
+    </div>
+
+    <!-- ========== STEP 1 : INSTITUTION & COURSE DETAILS ========== -->
+    <section id="step1" class="step-section active">
+      <h2>📋 Institution & Schedule Info</h2>
+      <div class="form-grid">
+        <div class="input-field">
+          <input type="text" id="instituteName" placeholder=" " value="DELHI TECHNICAL CAMPUS, Greater Noida">
+          <label>Institute Name</label>
+        </div>
+        <div class="input-field">
+          <input type="text" id="sessionTitle" placeholder=" " value="Time Table (Odd Session 2025-26)">
+          <label>Session Title</label>
+        </div>
+        <div class="input-field">
+          <input type="text" id="semester" placeholder=" " value="BCA III YEAR 6TH SEM">
+          <label>Semester / Class</label>
+        </div>
+        <div class="input-field">
+          <input type="text" id="roomNo" placeholder=" " value="C11 (BLOCK-C)">
+          <label>Room No</label>
+        </div>
+        <div class="input-field">
+          <input type="text" id="effectiveDate" placeholder=" " value="21.01.2026">
+          <label>w.e.f. Date</label>
+        </div>
+      </div>
+
+      <h2 style="margin-top:30px;">🍽️ Lunch Break</h2>
+      <div class="option-row">
+        <label class="checkbox-label">
+          <input type="checkbox" id="enableLunch" checked>
+          <span>Enable lunch break</span>
+        </label>
+      </div>
+      <div class="form-grid" id="lunchSettings">
+        <div class="input-field">
+          <select id="lunchStart" class="time-select">
+            <option value="11:30 - 12:25">11:30 - 12:25</option>
+            <option value="12:25 - 1:20" selected>12:25 - 1:20</option>
+            <option value="1:20 - 2:00">1:20 - 2:00</option>
+            <option value="2:00 - 2:50">2:00 - 2:50</option>
+          </select>
+          <label>Lunch Start Slot</label>
+        </div>
+        <div class="input-field">
+          <select id="lunchDuration">
+            <option value="1">1 slot (approx 45-60 min)</option>
+            <option value="2">2 slots</option>
+          </select>
+          <label>Duration</label>
+        </div>
+      </div>
+
+      <h2 style="margin-top:30px;">📚 Courses / Subjects</h2>
+      <div class="form-grid">
+        <div class="input-field">
+          <input type="text" id="emptySlotLabel" placeholder=" " value="Library / Free Lecture">
+          <label>Empty Slot Label</label>
+        </div>
+      </div>
+      <div id="courseContainer"></div>
+      <div class="button-row">
+        <button id="addCourseBtn" class="btn secondary icon">
+          <i class="fas fa-plus"></i> Add Course
+        </button>
+        <button id="toPreview" class="btn primary icon">
+          Next <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== STEP 2 : PREVIEW ========== -->
+    <section id="step2" class="step-section">
+      <h2>✅ Review Your Data</h2>
+      <div id="previewHeader" class="preview-header"></div>
+      <table id="previewTable">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Subject Name</th>
+            <th>Faculty</th>
+            <th>Type</th>
+            <th>Sess/Wk</th>
+            <th>Duration</th>
+            <th>Room</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="button-row">
+        <button id="backToEntry" class="btn secondary icon">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <button id="toGenerate" class="btn primary icon">
+          Generate <i class="fas fa-wand-magic-sparkles"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== STEP 3 : LOADING ========== -->
+    <section id="step3" class="step-section">
+      <h2>⚙️ Creating Your Timetable</h2>
+      <div class="loader-container">
+        <div class="loader"></div>
+        <p class="progress-text">Optimizing schedule...</p>
+      </div>
+    </section>
+
+    <!-- ========== STEP 4 : VIEW TIMETABLE ========== -->
+    <section id="step4" class="step-section">
+      <h2>🗓️ Your Weekly Schedule</h2>
+      <div id="timetableHeader" class="timetable-header"></div>
+      <div id="timetableGrid" class="grid-section"></div>
+      <div id="courseLegend" class="legend-section"></div>
+
+      <!-- Export Buttons -->
+      <div class="export-row">
+        <span class="export-label">Download as:</span>
+        <button id="exportPDF" class="btn export pdf"><i class="fas fa-file-pdf"></i> PDF</button>
+        <button id="exportExcel" class="btn export excel"><i class="fas fa-file-excel"></i> Excel</button>
+        <button id="exportCSV" class="btn export csv"><i class="fas fa-file-csv"></i> CSV</button>
+        <button id="exportWord" class="btn export word"><i class="fas fa-file-word"></i> Word</button>
+      </div>
+
+      <div class="button-row">
+        <button id="restartBtn" class="btn secondary icon"><i class="fas fa-redo"></i> New Schedule</button>
+        <button id="printBtn" class="btn primary icon"><i class="fas fa-print"></i> Print</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/form.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/timetable.js"></script>
+</body>
+</html>

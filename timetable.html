@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Printable Timetable · Delhi Tech</title>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <style>
+    @media print { .btn, .export-row { display: none; } body { background: white; } }
+  </style>
+</head>
+<body onload="initPrintView()">
+  <video id="bgVideo" class="background-video" autoplay muted loop playsinline>
+    <source src="css/bg.mp4" type="video/mp4">
+    Your browser does not support the background video.
+  </video>
+  <div class="wizard-container">
+    <h1 class="title">Your Weekly Schedule</h1>
+    <div id="timetableHeader" class="timetable-header"></div>
+    <div id="timetableGrid" class="grid-section"></div>
+    <div id="courseLegend" class="legend-section"></div>
+
+    <div class="export-row">
+      <span class="export-label">Download as:</span>
+      <button onclick="window.timetable.exportPDF()" class="btn export pdf"><i class="fas fa-file-pdf"></i> PDF</button>
+      <button onclick="window.timetable.exportExcel()" class="btn export excel"><i class="fas fa-file-excel"></i> Excel</button>
+      <button onclick="window.timetable.exportCSV()" class="btn export csv"><i class="fas fa-file-csv"></i> CSV</button>
+      <button onclick="window.timetable.exportWord()" class="btn export word"><i class="fas fa-file-word"></i> Word</button>
+    </div>
+    <div class="button-row">
+      <button onclick="window.print()" class="btn primary icon"><i class="fas fa-print"></i> Print</button>
+      <button onclick="window.close()" class="btn secondary icon"><i class="fas fa-times"></i> Close</button>
+    </div>
+  </div>
+  <script src="js/timetable.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    function initPrintView() {
+      // In a real scenario, you'd retrieve data from localStorage.
+      // For simplicity, we rely on window.courses being set from index.html.
+      if (!window.courses && localStorage.getItem('timetableCourses')) {
+        try { window.courses = JSON.parse(localStorage.getItem('timetableCourses')); } catch(e) {}
+      }
+      if (!window.emptySlotLabel && localStorage.getItem('timetableEmptyLabel')) {
+        try { window.emptySlotLabel = localStorage.getItem('timetableEmptyLabel'); } catch(e) {}
+      }
+      window.timetable.generate();
+    }
+  </script>
+</body>
+</html>
