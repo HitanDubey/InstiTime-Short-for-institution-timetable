@@ -64,7 +64,6 @@ An intelligent web-based timetable generator that transforms complex academic sc
 
 <div align="center">
   <img src="screenshots/gen.png" alt="InstiTime - Schedule Generation Process" width="800">
-  <br>
   <em>Real-time optimization with intelligent placement algorithm</em>
 
 ## 📋 Prerequisites
