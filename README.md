@@ -35,13 +35,37 @@ An intelligent web-based timetable generator that transforms complex academic sc
 - **Color-coded Courses**: Visual distinction for different subjects
 - **Faculty Legend**: Clear mapping of courses to instructors
 
-## 🚀 Screeshot of This small project
--- Front page
-![alt text](front.png)
--- preview
-![alt text](preview.png)
--- Generator
-![alt text](gen.png)
+## 📸 Application Screenshots
+
+### 🎯 Step 1: Institution & Course Details
+*The intuitive wizard interface for entering all scheduling parameters*
+
+<div align="center">
+  <img src="screenshots/front.png" alt="InstiTime - Institution & Course Details Interface" width="800">
+  <br>
+  <em>Modern glass-morphism UI with course management and lunch break configuration</em>
+</div>
+
+---
+
+### ✅ Step 2: Data Preview & Validation
+*Review and verify all entered information before generation*
+
+<div align="center">
+  <img src="screenshots/preview.png" alt="InstiTime - Preview & Validation Screen" width="800">
+  <br>
+  <em>Comprehensive preview table with edit capabilities and validation checks</em>
+</div>
+
+---
+
+### ⚙️ Step 3: Smart Schedule Generation
+*AI-powered algorithm optimizing your timetable*
+
+<div align="center">
+  <img src="screenshots/gen.png" alt="InstiTime - Schedule Generation Process" width="800">
+  <br>
+  <em>Real-time optimization with intelligent placement algorithm</em>
 
 ## 📋 Prerequisites
 
