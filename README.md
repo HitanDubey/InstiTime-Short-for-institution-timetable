@@ -36,8 +36,12 @@ An intelligent web-based timetable generator that transforms complex academic sc
 - **Faculty Legend**: Clear mapping of courses to instructors
 
 ## 🚀 Screeshot of This small project
+-- Front page
 ![alt text](front.png)
-
+-- preview
+![alt text](preview.png)
+-- Generator
+![alt text](gen.png)
 
 ## 📋 Prerequisites
 
